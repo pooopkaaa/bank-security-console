@@ -19,6 +19,7 @@ class Visit(models.Model):
     passcard = models.ForeignKey(Passcard)
     entered_at = models.DateTimeField()
     leaved_at = models.DateTimeField(null=True)
+    duration_sec = 0
 
     def __str__(self):
         return "{user} entered at {entered} {leaved}".format(
@@ -33,5 +34,11 @@ class Visit(models.Model):
         return "{:.0f}ч {:.0f}мин".format(hours, minutes)
 
     def get_duration(self, time):
-        duration_sec = (time - timezone.localtime(self.entered_at)).total_seconds()
-        return self._format_duration(duration_sec)
+        self.duration_sec = (time - timezone.localtime(self.entered_at)).total_seconds()
+        return self._format_duration(self.duration_sec)
+
+    def is_visit_long(self, minutes=60):
+        if self.duration_sec > minutes*60:
+            return True
+        else:
+            return False

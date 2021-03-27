@@ -14,7 +14,8 @@ def storage_information_view(request):
         non_closed_visits_info.append({
             'entered_at' : timezone.localtime(non_closed_visit.entered_at),
             'who_entered': non_closed_visit.passcard.owner_name, 
-            'duration': non_closed_visit.get_duration(timezone.now())
+            'duration': non_closed_visit.get_duration(timezone.now()),
+            'is_strange': non_closed_visit.is_visit_long()
         })
     print(non_closed_visits_info)
     context = {
