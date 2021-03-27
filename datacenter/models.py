@@ -32,6 +32,6 @@ class Visit(models.Model):
         minutes = (duration_sec % 3600) // 60
         return "{:.0f}ч {:.0f}мин".format(hours, minutes)
 
-    def get_duration(self):
-        duration_sec = (timezone.now() - timezone.localtime(self.entered_at)).total_seconds()
+    def get_duration(self, time):
+        duration_sec = (time - timezone.localtime(self.entered_at)).total_seconds()
         return self._format_duration(duration_sec)
