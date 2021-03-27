@@ -9,13 +9,16 @@ def storage_information_view(request):
 
     all_visits = Visit.objects.all()
     non_closed_visits = all_visits.filter(leaved_at=None)
+    non_closed_visits_info = []
     for non_closed_visit in non_closed_visits:
-        print('Зашёл в хранилище, время по Москве:', timezone.localtime(non_closed_visit.entered_at), sep='\n')
-        print('Находится в хранилище:', timezone.now() - timezone.localtime(non_closed_visit.entered_at), sep='\n')
-        print('Имя:', non_closed_visit.passcard.owner_name, sep='\n')
-    
+        non_closed_visits_info.append({
+            'entered_at' : timezone.localtime(non_closed_visit.entered_at),
+            'who_entered': non_closed_visit.passcard.owner_name, 
+            'duration': non_closed_visit.get_duration()
+        })
+    print(non_closed_visits_info)
     context = {
-        "non_closed_visits": non_closed_visits,  # не закрытые посещения
+        "non_closed_visits": non_closed_visits_info,  # не закрытые посещения
     }
 
     return render(request, 'storage_information.html', context)

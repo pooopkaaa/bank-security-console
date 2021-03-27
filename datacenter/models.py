@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.utils import timezone
+from django.utils import dateparse
 
 class Passcard(models.Model):
     is_active = models.BooleanField(default=False)
@@ -25,3 +26,12 @@ class Visit(models.Model):
             entered=self.entered_at,
             leaved= "leaved at " + str(self.leaved_at) if self.leaved_at else "not leaved"
         )
+    
+    def _format_duration(self, duration_sec):
+        hours = duration_sec // 3600
+        minutes = (duration_sec % 3600) // 60
+        return "{:.0f}ч {:.0f}мин".format(hours, minutes)
+
+    def get_duration(self):
+        duration_sec = (timezone.now() - timezone.localtime(self.entered_at)).total_seconds()
+        return self._format_duration(duration_sec)
