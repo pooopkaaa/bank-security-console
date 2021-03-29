@@ -21,6 +21,9 @@ PORT=
 NAME=
 USER=
 PASSWORD=
+SECRET_KEY=
+DJANGO_DEBUG=
+ALLOWED_HOSTS=
 ```
 
 - Запустите скрипт командой
